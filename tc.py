@@ -32,7 +32,6 @@ def FormateData(artistAndMusic, musicConsume):
         #1播放对应key0,2下载对应key1,3收藏对应key2
         key  = int(music[3]) - 1
         day  = time.strftime('%Y-%m-%d', time.localtime( int(music[2]) ) )
-        print(day)
         if len( dataSet[auth][key] ) == 0 :
             dataSet[auth][key].append([day, 1])
         else :
@@ -55,7 +54,7 @@ filePath = "mars_tianchi_user_actions.csv"
 musicConsume = ReadCvs( filePath, 1 )
 #将数据规整
 formateData = FormateData(artistAndMusic, musicConsume)
-#print(formateData)
+print(formateData)
 
 
     
