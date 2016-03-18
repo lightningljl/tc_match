@@ -2,6 +2,7 @@
 import csv
 import time
 import draw
+import least_square_method
 #cvs读取
 def ReadCvs(filePath, switch=0):
     number = 0
@@ -10,7 +11,7 @@ def ReadCvs(filePath, switch=0):
     reader = csv.reader(csvfile)
     for line in reader:
         dataSet.append( line )
-        if number > 100000 and switch == 1 : 
+        if number > 300000 and switch == 1 : 
             break
         number = number + 1
     csvfile.close() 
@@ -86,6 +87,31 @@ def showLine(dataSet, dayList):
             xList.append(x)
             yList.append(y)
     draw.DrawImage(xList, yList)
+#求参数
+def train(dataSet, dayList):
+    xList = []
+    yList = []
+    for (key, user) in dataSet.items():
+        #只显示下载量
+        x,y,find,number = 0,0,0,0
+        userDataList = []
+        for day in dayList:
+            find = 0
+            number = number + 1
+            x = number
+            for downLoadNumber in user[0]:
+                if downLoadNumber[0] == day :
+                    find = 1
+                    y = downLoadNumber[1]
+            if find == 0 :
+                y = 0
+            userDataList.append([x,y])
+        #发现一个样本大于5的用户数据，进行训练
+        if len(x) > 5 :
+            a,b = least_square_method.calc(userDataList)
+            print(a)
+            print(b)
+            break
 #读取歌曲伊人
 filePath = "mars_tianchi_songs.csv"
 artistAndMusic = ReadCvs( filePath )
@@ -96,7 +122,9 @@ musicConsume = ReadCvs( filePath, 1 )
 formateData,dayList = FormateData(artistAndMusic, musicConsume)
 
 #画图
-showLine(formateData, dayList)
-
+#showLine(formateData, dayList)
+#从图中可以看出，
+#利用做小二乘法计算出二元一次函数 c=ax+b的a和b参数
+train(formateData, dayList)
 
     
