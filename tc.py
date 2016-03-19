@@ -107,7 +107,7 @@ def train(dataSet, dayList):
                 y = 0
             userDataList.append([x,y])
         #发现一个样本大于5的用户数据，进行训练
-        if len(x) > 5 :
+        if len(userDataList) > 5 :
             a,b = least_square_method.calc(userDataList)
             print(a)
             print(b)
@@ -117,7 +117,7 @@ filePath = "mars_tianchi_songs.csv"
 artistAndMusic = ReadCvs( filePath )
 #读取歌曲消费信息
 filePath = "mars_tianchi_user_actions.csv"
-musicConsume = ReadCvs( filePath, 1 )
+musicConsume = ReadCvs( filePath, 3 )
 #将数据规整
 formateData,dayList = FormateData(artistAndMusic, musicConsume)
 
