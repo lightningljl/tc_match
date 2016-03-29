@@ -11,9 +11,11 @@ def ReadCvs(filePath, switch=0):
     reader = csv.reader(csvfile)
     for line in reader:
         dataSet.append( line )
-        if number > 300000 and switch == 1 : 
+        if number > 800000 and switch == 1 : 
             break
         number = number + 1
+        if number%1000 == 0 :
+            print(number)
     csvfile.close() 
     return dataSet
 #将数据规整
@@ -55,6 +57,7 @@ def FormateData(artistAndMusic, musicConsume):
             #print(day)
             if number == 0 :
                 dataSet[auth][key].append([day, 1])
+        print("运算中...")
     dayList.sort()
     return dataSet, dayList
 
@@ -73,20 +76,23 @@ def showLine(dataSet, dayList):
             find = 0
             number = number + 1
             x.append(number)
+            #x.append(day)
             for downLoadNumber in user[0]:
                 if downLoadNumber[0] == day :
                     find = 1
                     y.append(downLoadNumber[1])
             if find == 0 :
                 y.append(0)
-        if len(x) > 1 :
+        if len(x) > 5 :
             #print(dayList)
             #print(key)
             #print(x)
             #print(y)
             xList.append(x)
             yList.append(y)
+            break;
     draw.DrawImage(xList, yList)
+    
 #求参数
 def train(dataSet, dayList):
     xList = []
@@ -98,7 +104,8 @@ def train(dataSet, dayList):
         for day in dayList:
             find = 0
             number = number + 1
-            x = number
+            #x = number
+            x = day
             for downLoadNumber in user[0]:
                 if downLoadNumber[0] == day :
                     find = 1
@@ -107,8 +114,9 @@ def train(dataSet, dayList):
                 y = 0
             userDataList.append([x,y])
         #发现一个样本大于5的用户数据，进行训练
-        if len(userDataList) > 5 :
+        if len(userDataList) > 7 :
             a,b = least_square_method.calc(userDataList)
+            print(userDataList)
             print(a)
             print(b)
             break
@@ -117,14 +125,14 @@ filePath = "mars_tianchi_songs.csv"
 artistAndMusic = ReadCvs( filePath )
 #读取歌曲消费信息
 filePath = "mars_tianchi_user_actions.csv"
-musicConsume = ReadCvs( filePath, 3 )
+musicConsume = ReadCvs( filePath, 1 )
 #将数据规整
 formateData,dayList = FormateData(artistAndMusic, musicConsume)
 
 #画图
-#showLine(formateData, dayList)
+showLine(formateData, dayList)
 #从图中可以看出，
 #利用做小二乘法计算出二元一次函数 c=ax+b的a和b参数
-train(formateData, dayList)
+#train(formateData, dayList)
 
     
